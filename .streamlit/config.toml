@@ -1,0 +1,12 @@
+# You can create a theme for your Streamlit app by creating a file called config.toml in the .streamlit directory of your project.
+[theme]
+# Choosing the colour which outlines the widgets
+primaryColor="#F63366"
+# Background colour of the app
+backgroundColor="#FFFFFF"
+# A secondary background colour (e.g. changes the colour of the sidebar)
+secondaryBackgroundColor="#F0F2F6"
+#Colour of the text
+textColor="#262730"
+# Change the font
+font="sans serif"
