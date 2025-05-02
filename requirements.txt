@@ -1,0 +1,4 @@
+streamlit
+matplotlib
+altair
+streamlit-option-menu
