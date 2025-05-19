@@ -11,15 +11,14 @@ We also learn how to password protect our app.
 import streamlit as st  # For building the web app
 import pandas as pd  # For simple data manipulation
 from PIL import Image  # For loading images
-import altair as alt
-from streamlit_option_menu import option_menu
-import os
+import altair as alt  # For creating interactive charts with Altair
+from streamlit_option_menu import option_menu  # For creating a sidebar menu
 
 # Import the utility functions
 from utils.getters import generate_random_data
 from utils.fonts_setup import nestafont, NESTA_COLOURS
 
-# We setup the fonts and colours for the app in the utils/fonts_setup.py file
+# We setup the fonts and colours for the altair plots in the utils/fonts_setup.py file
 alt.themes.register("nestafont", nestafont)
 alt.themes.enable("nestafont")
 colours = NESTA_COLOURS
@@ -34,7 +33,7 @@ st.set_page_config(
 
 def create_app_with_structure():
     """
-    This function will setup a very a Streamlit app with expanders, sidebar and multiple pages.
+    This function will setup a Streamlit app with expanders, sidebar and multiple pages.
     """
 
     # Add a title to the app
@@ -107,9 +106,7 @@ def create_app_with_structure():
             # Loading the data
             data = generate_random_data()
 
-            # Let's now add a slider and a multiselect
-            genders = data["gender"].unique()
-            st.markdown("## Let's learn about sliders and multiselects")
+            # Create a slider to select a range of years
             min_year, max_year = st.slider(
                 "Select the range of dates",
                 min_value=data["year"].min(),
@@ -118,38 +115,72 @@ def create_app_with_structure():
                 step=1,  # shows values in increments of 1 year
             )
 
-            gender_selection_multiselect = st.multiselect(
-                "Choose one or more genders", options=genders, default=genders
-            )
+            # List of unique genders
+            genders = list(data["gender"].unique())
 
-            filtered_data_by_year_and_gender = data[
-                (data["year"] >= min_year)
-                & (data["year"] <= max_year)
-                & (data["gender"].isin(gender_selection_multiselect))
+            # Initialize session state for gender and set it to "F"
+            if "gender" not in st.session_state:
+                st.session_state.gender = "F"
+
+            # Creating a select box for gender
+            gender_selection = st.selectbox(
+                "Choose one gender",
+                options=genders,
+                index=genders.index(st.session_state.gender),
+                key="gender",
+            )  # using session state allows for the value of gender selection not to change when the slider is changed
+
+            # Filter data by year range
+            filtered_data_by_year = data[
+                (data["year"] >= min_year) & (data["year"] <= max_year)
             ].copy()
 
-            # Group by category (e.g., gender) and calculate mean income, or use any metric
-            avg_income_by_gender_in_selection = (
-                filtered_data_by_year_and_gender.groupby("gender")["yearly_income"]
-                .mean()
-                .reset_index()
+            # Compute average income for selected gender within selected years
+            avg_income_selected_gender = filtered_data_by_year[
+                filtered_data_by_year["gender"] == gender_selection
+            ]["yearly_income"].mean()
+
+            # Compute overall average income across all genders within selected years
+            avg_income_overall = filtered_data_by_year["yearly_income"].mean()
+
+            # Prepare data for chart
+            chart_data = pd.DataFrame(
+                {
+                    "Group": [f"{gender_selection}", "Overall"],
+                    "Average Income": [avg_income_selected_gender, avg_income_overall],
+                }
             )
 
-            # Altair horizontal bar chart
+            # Creating the altair horizontal bar chart
             bar_chart = (
-                alt.Chart(avg_income_by_gender_in_selection)
-                .mark_bar(size=50, color=NESTA_COLOURS[0])
+                alt.Chart(chart_data)
+                .mark_bar(size=50)
                 .encode(
-                    x=alt.X("yearly_income:Q", title="Average Income"),
-                    y=alt.Y("gender:N", title="Gender"),
+                    x=alt.X("Average Income:Q", title="Average Income"),
+                    y=alt.Y(
+                        "Group:N",
+                        title="Group",
+                        sort=["Overall", gender_selection],
+                        scale=alt.Scale(paddingInner=0.3),  # adds space between bars
+                    ),
+                    color=alt.Color(
+                        "Group:N",
+                        scale=alt.Scale(
+                            domain=["Overall", gender_selection],
+                            range=[NESTA_COLOURS[10], NESTA_COLOURS[0]],
+                        ),
+                        legend=None,
+                    ),
                 )
                 .properties(
-                    title="Average income by gender in selected years",
+                    title="Average Income: Selected Gender vs. Overall",
                     width=600,
-                    height=400,
+                    height=300,
                 )
             )
-            st.altair_chart(bar_chart, use_container_width=True)
+
+            # Displaying the altair chart
+            st.altair_chart(bar_chart, use_container_width=False)
 
     else:
         st.markdown("## This can be our metadata page")
@@ -168,7 +199,7 @@ def create_app_with_structure():
 
 # Let's setup password protection on the sidebar
 pwd = st.sidebar.text_input("Password:", type="password")
-# st.secrets reads it in from the toml folder, and then runs the streamlit_iod function if the password matches.
+# st.secrets reads it in from the toml folder, and then runs the create_app_with_structure() function if the password matches.
 if pwd == st.secrets["PASSWORD"]:
     create_app_with_structure()
 elif pwd == "":  # avoids error when app is first opened

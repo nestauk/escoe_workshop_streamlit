@@ -161,7 +161,7 @@ def my_simple_streamlit_app():
         .properties(
             title="Average Income: Selected Gender vs. Overall",
             width=600,
-            height=300,  # Increased height
+            height=300,
         )
     )
 
