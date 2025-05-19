@@ -1,5 +1,5 @@
 """
-Utility functions for the streamlit apps.
+Script with getter function for generating random data showing ID, gender and income.
 """
 
 import pandas as pd
@@ -22,7 +22,7 @@ def generate_random_data(n_id:int=1000, years:np.array= np.arange(2015, 2025), g
     id_df = pd.DataFrame({
         'id': np.arange(1, n_id + 1),
         'gender': np.random.choice(gender_list, size=n_id),
-        'base_income': np.round(np.random.normal(30000, 5000, size=n_id), -2),
+        'base_income': np.round(np.random.normal(base_income, 10000, size=n_id), -2),
         'growth_rate': np.random.uniform(0.01, 0.05, size=n_id)  # annual income growth: 1–5%
     })
 
