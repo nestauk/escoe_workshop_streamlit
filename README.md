@@ -26,13 +26,14 @@ It is helpful to have access to a code editor, such as [VSCode](https://code.vis
 
 ## 🛠️ Setup
 
-In your terminal, you will need to run the following commands to set up the environment and install the package requirements.
-
-1. Fork this repository:
 
 Click fork on the upper right corner of the page to create a copy of this repository in your GitHub account.
 
-2. Clone this repository:
+
+In your terminal, you will need to run the following commands to set up the environment and install the package requirements.
+
+
+1. Clone this repository:
 
 `git clone git@github.com:YOUR_GITHUB_HANDLE/escoe_workshop_streamlit.git`
 
@@ -55,6 +56,8 @@ don't forget to change the above by replacing `YOUR_GITHUB_HANDLE` with your Git
 This file contains basic features of Streamlit, and you can run it with
 
 `streamlit run 01_learn_basics_about_streamlit.py`.
+
+If you are not familiar with Altair, you can also take time to explore how to create plots in Altair.
 
 2. Explore the `02_structuring_app.py` to learn more about how to structure your app using expanders, side bar and multiple pages.
 You will also learn how to password protect your app. Run this script with 
