@@ -42,7 +42,7 @@ don't forget to change the above by replacing `YOUR_GITHUB_HANDLE` with your Git
 
 `conda create --name streamlit_escoe_workshop python==3.13`
 
-3. Activate your conda environemtn:
+3. Activate your conda environment:
 
 `conda activate streamlit_escoe`
 
