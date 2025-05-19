@@ -36,7 +36,7 @@ Click fork on the upper right corner of the page to create a copy of this reposi
 
 `git clone git@github.com:YOUR_GITHUB_HANDLE/escoe_workshop_streamlit.git`
 
-don't forget to change the above my replacing `YOUR_GITHUB_HANDLE` with your GitHub username.
+don't forget to change the above by replacing `YOUR_GITHUB_HANDLE` with your GitHub username.
 
 2. Create a conda environment:
 
