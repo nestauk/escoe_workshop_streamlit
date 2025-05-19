@@ -41,7 +41,7 @@ def create_app_with_structure():
         side_bar_options = option_menu (
             menu_title = "Side menu title",
             options = ["About this app", "Analysis", "Metadata"], # The options to be displayed in the sidebar
-            icons = ["house", "gear", "info-circle"],   # The icons to be displayed next to the options. You can select from:
+            icons = ["house", "gear", "info-circle"],   # The icons to be displayed next to the options. You can select from: https://icons.getbootstrap.com/
             default_index = 0, # Defaults to the "About this app" page
             orientation="vertical",
             styles={
